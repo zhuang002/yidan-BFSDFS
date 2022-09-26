@@ -61,6 +61,42 @@ class Graph:
                 return True
         return False
 
+    def is_connected_graph_bfs(self):
+        current = [0]
+        next = []
+        visited = [False] * self.no_of_nodes
+        visited[node1] = True
+
+        while current:
+            for node in current:
+                neighbours = self.get_neighbours(node)
+                for neighbour in neighbours:
+                    if not visited[neighbour]:
+                        next.append(neighbour)
+                        visited[neighbour] = True
+            current = next
+            next = []
+        for visit in visited:
+            if not visit:
+                return False
+        return True
+
+    def is_connected_graph_dfs(self):
+        visited = [False] * self.no_of_nodes
+        self.walk_graph_dfs_recursive(0, visited)
+        for visit in visited:
+            if not visit:
+                return False
+        return True
+
+    def walk_graph_dfs_recursive(self, node, visited):
+        visited[node] = True
+        neighbours = self.get_neighbours(node1)
+        for neighbour in neighbours:
+            if visited[neighbour]:
+                continue
+            self.walk_graph_dfs_recursive(neighbour, visited)
+
 
 g = Graph()
 g.load()
@@ -75,4 +111,14 @@ if g.is_connected_dfs(node1, node2):
     print("%d and %d are connected" % (node1, node2))
 else:
     print("%d and %d are not connected" % (node1, node2))
+
+if g.is_connected_graph_bfs():
+    print("connected graph")
+else:
+    print("disconnected graph")
+
+if g.is_connected_graph_dfs():
+    print("connected graph")
+else:
+    print("disconnected graph")
 
