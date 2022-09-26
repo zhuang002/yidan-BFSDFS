@@ -1,24 +1,31 @@
+class Node:
+    def __init__(self, id):
+        self.id = id
+        self.neighbours = []
+
 class Graph:
     def __init__(self):
-        self.graph = None
-        self.no_of_nodes = 0
-        self.visited = None
+        self.nodes = None
+
 
     def load(self):
         print("Please input graph data:")
         n, p = map(int, input().split(' '))
-        self.no_of_nodes = n
-        self.graph = [[0] * n for i in range(n)]
+        self.nodes=[None]*n
+        for i in range(n):
+            self.nodes[i] = Node(i)
+
         for i in range(p):
             start, end = map(int, input().split(' '))
-            self.graph[start][end] = self.graph[end][start] = 1
+            self.nodes[start].neighbours.append(end)
+            self.nodes[end].neighbours.append(start)
 
     def is_connected_bfs(self, node1, node2):
         if node1 == node2:
             return True
         current = [node1]
         next = []
-        visited = [False] * self.no_of_nodes
+        visited = [False] * len(self.nodes)
         visited[node1] = True
 
         while current:
@@ -35,14 +42,11 @@ class Graph:
         return False
 
     def get_neighbours(self, node):
-        neighbours = []
-        for i in range(self.no_of_nodes):
-            if self.graph[i][node] == 1:
-                neighbours.append(i)
-        return neighbours
+        return self.nodes[node].neighbours
+
 
     def is_connected_dfs(self,node1, node2):
-        visited = [False] * self.no_of_nodes
+        visited = [False] * len(self.nodes)
         return self.is_connected_dfs_recursive(node1, node2, visited)
 
     def is_connected_dfs_recursive(self, node1, node2, visited):
